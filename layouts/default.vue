@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <Snackbar />
     <v-app-bar fixed app>
       <v-toolbar-title class="mr-4" v-text="title" />
       <v-btn nuxt text to="/">Inicio</v-btn>
@@ -18,7 +19,10 @@
 </template>
 
 <script>
+import Snackbar from '~/components/Snackbar.vue'
+
 export default {
+  components: { Snackbar },
   data: () => ({
     title: 'Equipos',
   }),
