@@ -1,29 +1,29 @@
 <template>
-  <v-layout column align-start class="orders">
-    <v-card
-      v-for="(alert, $i) in filtersItems"
-      :key="$i"
-      style="min-width: 350px"
-      :color="alert.color"
-      class="ma-2"
+  <div class="orders">
+    <v-alert
+      v-for="alert in filtersItems"
+      :key="alert.id"
+      v-model="alert.show"
+      border="left"
+      :icon="false"
+      :type="alert.type"
+      transition="scale-transition"
+      elevation="4"
+      :dismissible="alert.close || alert.type === 'error'"
+      class="alert"
     >
-      <v-card-text class="pa-2 px-3">
-        <v-layout align-center>
-          <v-flex>
-            <error :text="alert.text" type="none" />
-          </v-flex>
-          <v-btn icon text dark @click.stop="alert.show = false">
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-layout>
-      </v-card-text>
-    </v-card>
-  </v-layout>
+      <span v-text="alert.text" />
+    </v-alert>
+  </div>
 </template>
 
 <script>
+/// <reference path="../types/index" />
+
 export default {
   data: () => ({
+    id: 0,
+    /** @type {Array<Alert>} */
     items: [],
   }),
   computed: {
@@ -34,10 +34,16 @@ export default {
   created() {
     this.$store.subscribe((mutation, { snackbar }) => {
       if (mutation.type === 'snackbar/show') {
-        const alert = { show: true, ...snackbar.alert }
-        this.items.push(alert)
+        const self = this
+        /** @type {Alert} */
+        const alert = snackbar.alert
+        alert.show = true
+        alert.id = this.id++
+        const index = this.items.push(alert)
         setTimeout(function () {
           alert.show = false
+          self.$set(self.items, index, alert)
+          // self.items = self.filtersItems
         }, alert.timeout)
       }
     })
@@ -48,8 +54,28 @@ export default {
 
 <style scoped>
 .orders {
+  flex-wrap: nowrap;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center !important;
   z-index: 1000;
   display: flex;
   position: fixed;
+  padding-top: 24px;
+  pointer-events: none;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+.alert {
+  pointer-events: auto;
+  min-width: 350px;
+  align-self: center;
+  align-items: center;
+  transition-duration: 0.15s;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 </style>
