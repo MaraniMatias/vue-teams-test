@@ -49,8 +49,8 @@ export const actions = {
     }
   },
   orderByTeams({ commit, state }, orderKey) {
-    const filterItems = OrderByTeams(orderKey, state.filterItems)
     if (orderKey) {
+      const filterItems = OrderByTeams(orderKey, state.filterItems)
       commit('SET_FILTER', filterItems || [])
     } else {
       commit('CLEANER_FILTER')
