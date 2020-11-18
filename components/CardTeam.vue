@@ -2,46 +2,44 @@
   <div>
     <v-hover v-slot:default="{ hover }">
       <v-card outlined :elevation="hover ? 1 : 0" class="my-4" width="512">
-        <v-card-text>
+        <v-card-text class="pb-0">
           <v-layout>
             <Avatar size="128" :src="logo" />
-            <v-card-title>
-              <v-flex d-flex>
-                <v-layout column fill-height>
-                  <p class="headline mb-0" v-text="team.school" />
-                  <span class="subtitle-1">
-                    Abreviatura: {{ team.abbreviation }}
-                  </span>
-                  <p class="title mb-0">
-                    <v-icon :color="team.color" size="24">mdi-paw</v-icon>
-                    {{ team.mascot }}
-                  </p>
-                </v-layout>
-              </v-flex>
-            </v-card-title>
+            <v-flex d-flex class="ml-4">
+              <v-layout column fill-height>
+                <p class="headline mb-0" v-text="team.school" />
+                <span class="subtitle-1">
+                  Abreviatura: {{ team.abbreviation }}
+                </span>
+                <p class="title mb-0">
+                  <v-icon :color="team.color" size="24">mdi-paw</v-icon>
+                  {{ team.mascot }}
+                </p>
+              </v-layout>
+            </v-flex>
           </v-layout>
-          <v-card-actions>
-            <v-layout justify-end>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    color="sencudary"
-                    icon
-                    @click="setAddOrRemoveToFavourite()"
-                    v-on="on"
-                  >
-                    <v-icon v-if="isFavourite">mdi-star</v-icon>
-                    <v-icon v-else>mdi-star-outline</v-icon>
-                  </v-btn>
-                </template>
-                {{ isFavourite ? 'Sacar de ' : 'Agregar a ' }} favoritos
-              </v-tooltip>
-              <v-btn color="primary" text :to="perfilLink" class="mx-2">
-                Ver Perfil
-              </v-btn>
-            </v-layout>
-          </v-card-actions>
         </v-card-text>
+        <v-card-actions>
+          <v-layout justify-end>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  color="sencudary"
+                  icon
+                  @click="setAddOrRemoveToFavourite()"
+                  v-on="on"
+                >
+                  <v-icon v-if="isFavourite">mdi-star</v-icon>
+                  <v-icon v-else>mdi-star-outline</v-icon>
+                </v-btn>
+              </template>
+              {{ isFavourite ? 'Sacar de ' : 'Agregar a ' }} favoritos
+            </v-tooltip>
+            <v-btn color="primary" text :to="perfilLink" class="mx-2">
+              Ver Perfil
+            </v-btn>
+          </v-layout>
+        </v-card-actions>
       </v-card>
     </v-hover>
     <v-dialog v-model="showModalAddComment" max-width="400">
