@@ -108,6 +108,7 @@ export default {
     saveFavoriteTeam(formValid) {
       if (!formValid) return false
       localStorage.setItem(this.favoriteKey, this.favoriteComment)
+      this.$notify({ type: 'success', text: 'Equipo agregado a favoritos' })
       this.isFavourite = true
       this.close()
     },
