@@ -13,7 +13,7 @@ function loadFromLS() {
 const items = loadFromLS()
 
 /**
- * @returns {Team[]} team
+ * @returns {Array<[number,string]>} team
  */
 export const getAll = () => Array.from(items)
 
