@@ -41,7 +41,7 @@ export const actions = {
   },
   filterTeams({ commit, state }, query) {
     if (query) {
-      const filterItems = state.teams.filter((team) => {
+      const filterItems = state.filterItems.filter((team) => {
         const mascot = team.mascot?.toLowerCase() || ''
         const school = team.school?.toLowerCase() || ''
         return mascot.includes(query) || school.includes(query)
