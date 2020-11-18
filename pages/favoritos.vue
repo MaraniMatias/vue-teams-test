@@ -4,7 +4,7 @@ storage
 -->
 
 <template>
-  <TeamGrid
+  <GridTeam
     favorite
     :items="filterItems"
     :page="page"
@@ -19,13 +19,13 @@ storage
 </template>
 
 <script>
-import TeamGrid from './../components/TeamGrid'
+import GridTeam from './../components/GridTeam'
 import * as Favorites from '~/api/favorite'
 import FilterItems from '~/utils/FilterTeams'
 import OrderByTeams from '~/utils/OrderByTeams'
 
 export default {
-  components: { TeamGrid },
+  components: { GridTeam },
   asyncData() {},
   data: () => ({
     teams: [],

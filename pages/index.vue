@@ -1,5 +1,5 @@
 <template>
-  <TeamGrid
+  <GridTeam
     :items="itemsOnPage"
     :page="page"
     :items-pre-page="itemsPrePage"
@@ -14,10 +14,10 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import TeamGrid from './../components/TeamGrid'
+import GridTeam from './../components/GridTeam'
 
 export default {
-  components: { TeamGrid },
+  components: { GridTeam },
   asyncData() {},
   data: () => ({
     loading: true,
