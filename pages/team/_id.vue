@@ -1,9 +1,7 @@
 <template>
   <v-layout column mb-2 px-2>
     <v-layout v-if="team" justify-center fill-height mt-0>
-      <v-flex xs12 lg7 xl5>
-        <CardTeam :team="team" />
-      </v-flex>
+      <CardTeam :team="team" show-details />
     </v-layout>
     <v-row v-else align="center" justify="center" class="my-12">
       <div class="text-center">
@@ -36,7 +34,7 @@ export default {
     const teamId = params.id
     if (teamId) {
       const team = store.getters.findById(parseInt(teamId, 10))
-      return { team, component: '' }
+      return { team }
     } else {
       return { team: null }
     }
