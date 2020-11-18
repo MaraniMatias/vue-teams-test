@@ -39,7 +39,7 @@ En las vistas de listado se podrá ordenar y filtrar y/o buscar.
 
 ### Listado de Favoritos
 
-Este listado que sea similar al Listado de Equipos, pero añadiendo los comentarios del usuario.
+Este listado que sea similar al listado de Equipos, pero añadiendo los comentarios del usuario.
 Que desde aquí se pueda eliminar cualquier equipo de favoritos.
 En las vistas de listado se podrá ordenar y filtrar y/o buscar.
 
