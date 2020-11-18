@@ -19,13 +19,13 @@ export const mutations = {
   SET_TEAMS(state, teams) {
     // state.teams = teams.splice(0, 20)
     state.teams = teams
-    state.filterItems = teams
+    state.filterItems = teams.slice(0)
   },
   SET_FILTER(state, teams) {
     state.filterItems = teams
   },
   CLEANER_FILTER(state) {
-    state.filterItems = state.teams || []
+    state.filterItems = state.teams.slice(0)
   },
 }
 
