@@ -1,3 +1,5 @@
+import es from 'vuetify/es5/locale/es'
+
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
@@ -64,12 +66,22 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: false,
       themes: {
         light: {
-          primary: '#086b94',
+          primary: '#000000',
+          accent: '#000000',
+          error: '#B71C1C',
         },
       },
+    },
+    lang: {
+      locales: { es },
+      current: 'es',
+    },
+    // https://materialdesignicons.com/
+    // https://cdn.materialdesignicons.com/5.3.45/
+    icons: {
+      iconfont: 'mdi',
     },
   },
 
