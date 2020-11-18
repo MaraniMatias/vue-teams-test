@@ -95,7 +95,9 @@ export default {
     },
     disableNextBtn() {
       return (
-        this.loading || this.page * this.itemsPrePage * 2 >= this.totalItems
+        this.loading ||
+        this.page * this.itemsPrePage * 2 >= this.totalItems ||
+        this.itemsPrePage > this.totalItems
       )
     },
   },
