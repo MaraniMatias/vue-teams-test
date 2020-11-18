@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-hover v-slot:default="{ hover }">
-      <v-card outlined :elevation="hover ? 1 : 0" class="my-4">
+      <v-card outlined :elevation="hover ? 1 : 0" class="my-4" width="512">
         <v-card-text>
           <v-layout>
             <Avatar size="128" :src="logo" />
