@@ -1,87 +1,71 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
+  <v-layout column justify-center>
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="8" class="pb-0 mb-0">
+        <v-layout justify-center align-center>
+          <v-text-field label="Buscar" />
+          <v-text-field label="Filtrar" />
+          <v-text-field label="Ordenar" />
           <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+          <v-btn icon>
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-layout>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-flex v-show="loading" xs12 class="text-center my-12">
+        <v-progress-circular
+          width="2"
+          indeterminate
+          active
+          color="grey darken-1"
+        />
+        <p class="mt-6">Buscando...</p>
+      </v-flex>
+    </v-row>
+    <v-row justify="center">
+      <v-col
+        v-for="team in filterItems"
+        :key="team.id"
+        cols="auto"
+        class="pb-0 mb-0"
+      >
+        <CardTeam :team="team" />
+      </v-col>
+    </v-row>
+  </v-layout>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import CardTeam from './../components/CardTeam'
+
 export default {
-  components: {},
+  components: { CardTeam },
+  asyncData() {},
+  data: () => ({
+    filterItems: [],
+    totalElements: 0,
+    loading: true,
+  }),
+  computed: {
+    ...mapState(['teams']),
+  },
+  async mounted() {
+    const { data, error } = await this.getTeams()
+    if (error) {
+      this.$notify({ type: 'error', text: 'No pudimos listar los equipos' })
+    }
+    this.loading = false
+    this.teams = data || []
+    this.filterItems = data.splice(0, 9)
+  },
+  methods: {
+    ...mapActions(['getTeams']),
+  },
 }
 </script>
