@@ -4,7 +4,7 @@
       <v-col cols="12" sm="8" lg="10" class="pa-0 mb-0">
         <v-layout justify-center align-center wrap>
           <v-flex xs12 lg3 class="px-2">
-            <v-text-field label="Buscar" hide-details />
+            <v-text-field v-model.lazy="query" label="Buscar" hide-details />
           </v-flex>
           <v-flex xs12 lg3 class="px-2">
             <v-text-field label="Filtrar" hide-details />
@@ -63,9 +63,10 @@ export default {
     page: 0,
     itemsPrePage: 9,
     loading: true,
+    query: null,
   }),
   computed: {
-    ...mapState(['teams']),
+    ...mapState({ teams: 'filterItems' }),
     showPageInfo() {
       return `Pag.: ${this.page + 1} - Equipo: ${this.totalElements}`
     },
@@ -76,18 +77,24 @@ export default {
       return this.page * this.itemsPrePage * 2 >= this.totalElements
     },
   },
+  watch: {
+    query: 'search',
+  },
   async mounted() {
     const { error } = await this.getTeams()
     if (error) {
       this.$notify({ type: 'error', text: 'No pudimos listar los equipos' })
     }
     this.loading = false
-    this.page = 0
-    this.totalElements = this.teams.length
-    this.filterItems = this.teams.slice(0, this.itemsPrePage)
+    this.reloadItems()
   },
   methods: {
-    ...mapActions(['getTeams']),
+    ...mapActions(['getTeams', 'filter']),
+    reloadItems() {
+      this.page = 0
+      this.totalElements = this.teams.length
+      this.filterItems = this.teams.slice(0, this.itemsPrePage)
+    },
     beforePage() {
       const start = this.page * this.itemsPrePage - this.itemsPrePage
       const end = start + this.itemsPrePage
@@ -105,6 +112,10 @@ export default {
       if (start < this.totalElements) {
         this.page += 1
       }
+    },
+    async search() {
+      await this.filter(this.query)
+      this.reloadItems()
     },
   },
 }
