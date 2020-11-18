@@ -27,15 +27,14 @@
                   <v-btn
                     color="sencudary"
                     icon
-                    :loading="savingToFavorite"
                     @click="setAddOrRemoveToFavourite()"
                     v-on="on"
                   >
-                    <v-icon v-if="isInFavourite">mdi-star</v-icon>
+                    <v-icon v-if="isFavourite">mdi-star</v-icon>
                     <v-icon v-else>mdi-star-outline</v-icon>
                   </v-btn>
                 </template>
-                {{ isInFavourite ? 'Sacar de ' : 'Agregar a ' }} favoritos
+                {{ isFavourite ? 'Sacar de ' : 'Agregar a ' }} favoritos
               </v-tooltip>
               <v-btn color="primary" text :to="perfilLink" class="mx-2">
                 Ver Perfil
@@ -45,6 +44,27 @@
         </v-card-text>
       </v-card>
     </v-hover>
+    <v-dialog v-model="showModalAddComment" max-width="400">
+      <CardForm :reset="showModalAddComment" @submit="saveFavoriteTeam">
+        <template v-slot:header>Agregue un comentario</template>
+        <template v-slot:default="{ rules }">
+          <v-flex xs12 mt-2>
+            <v-textarea
+              v-model.lazy="favoriteComment"
+              auto-grow
+              counter="500"
+              label="Escriba un comentario o nota."
+              outlined
+              :rules="[rules.max(500), rules.required()]"
+            />
+          </v-flex>
+        </template>
+        <template v-slot:actions>
+          <v-btn text @click="close()">Cancelar</v-btn>
+          <v-btn color="primary" type="submit">Agregar</v-btn>
+        </template>
+      </CardForm>
+    </v-dialog>
   </div>
 </template>
 
@@ -58,8 +78,9 @@ export default {
   },
   data: () => ({
     perfil: {},
-    savingToFavorite: false,
-    isInFavourite: false,
+    isFavourite: false,
+    favoriteComment: '',
+    showModalAddComment: false,
   }),
   computed: {
     logo() {
@@ -73,16 +94,26 @@ export default {
     },
   },
   mounted() {
-    this.isInFavourite = localStorage.getItem(this.favoriteKey) !== null
+    this.isFavourite = localStorage.getItem(this.favoriteKey) !== null
   },
   methods: {
     setAddOrRemoveToFavourite() {
-      if (this.isInFavourite) {
+      if (this.isFavourite) {
         localStorage.removeItem(this.favoriteKey)
+        this.isFavourite = false
       } else {
-        localStorage.setItem(this.favoriteKey, JSON.stringify(this.team))
+        this.showModalAddComment = true
       }
-      this.isInFavourite = !this.isInFavourite
+    },
+    saveFavoriteTeam(formValid) {
+      if (!formValid) return false
+      localStorage.setItem(this.favoriteKey, this.favoriteComment)
+      this.isFavourite = true
+      this.close()
+    },
+    close() {
+      this.favoriteComment = ''
+      this.showModalAddComment = false
     },
   },
 }
