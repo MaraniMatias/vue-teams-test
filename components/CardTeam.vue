@@ -129,6 +129,9 @@ export default {
   },
   mounted() {
     this.isFavourite = Favorites.has(this.team.id)
+    if (this.isFavourite) {
+      this.favoriteComment = Favorites.getByID(this.team.id)
+    }
   },
   methods: {
     setAddOrRemoveToFavourite() {

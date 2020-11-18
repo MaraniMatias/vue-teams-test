@@ -1,5 +1,11 @@
+<!--
+Para persistir la búsqueda como en la vista de equipos tendría que usar el
+storage
+-->
+
 <template>
   <TeamGrid
+    favorite
     :items="filterItems"
     :page="page"
     :items-pre-page="itemsPrePage"

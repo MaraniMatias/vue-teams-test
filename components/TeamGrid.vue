@@ -56,7 +56,7 @@
     </v-row>
     <v-row justify="center">
       <v-col v-for="team in items" :key="team.id" cols="auto" class="pb-0 mb-0">
-        <CardTeam :team="team" />
+        <CardTeam :team="team" :show-comment="favorite" />
       </v-col>
     </v-row>
   </v-layout>
@@ -75,6 +75,7 @@ export default {
     itemsPrePage: { type: Number, default: 9 },
     totalItems: { type: Number, default: 0 },
     loading: { type: Boolean, default: false },
+    favorite: { type: Boolean, default: false },
   },
   data: () => ({
     query: null,
