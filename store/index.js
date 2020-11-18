@@ -40,10 +40,11 @@ export const actions = {
   },
   filterTeams({ commit, state }, query) {
     if (query) {
+      const q = query.toLowerCase()
       const filterItems = state.filterItems.filter((team) => {
         const mascot = team.mascot?.toLowerCase() || ''
         const school = team.school?.toLowerCase() || ''
-        return mascot.includes(query) || school.includes(query)
+        return mascot.includes(q) || school.includes(q)
       })
       commit('SET_FILTER', filterItems || [])
     } else {
