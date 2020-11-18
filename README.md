@@ -9,6 +9,9 @@ $ npm install
 # serve with hot reload at localhost:3000
 $ npm run dev
 
+# run tests
+$ npm run test
+
 # build for production and launch server
 $ npm run build
 $ npm run start
@@ -47,3 +50,7 @@ En las vistas de listado se podrá ordenar y filtrar y/o buscar.
 
 Una vista individual con toda la información posible que nos da la API.
 Colegio, mascota, abreviatura, nombre alternativo, conferencia, división, colores y logo.
+
+## NOTA
+
+Agregue un solo test para el component Avatar
