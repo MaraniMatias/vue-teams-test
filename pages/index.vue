@@ -1,21 +1,28 @@
 <template>
   <v-layout column justify-center>
     <v-row justify="center" align="center">
-      <v-col cols="12" sm="8" class="pb-0 mb-0">
-        <v-layout justify-center align-center>
-          <v-text-field label="Buscar" />
-          <v-text-field label="Filtrar" />
-          <v-text-field label="Ordenar" />
-          <v-spacer />
-          <p class="mb-0 mx-2">
-            Pagina: {{ page }} - Equipo: {{ totalElements }}
-          </p>
-          <v-btn icon :disabled="disableBeforeBtn" @click="beforePage">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn icon :disabled="disableNextBtn" @click="nextPage">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
+      <v-col cols="12" sm="8" lg="10" class="pa-0 mb-0">
+        <v-layout justify-center align-center wrap>
+          <v-flex xs12 lg3 class="px-2">
+            <v-text-field label="Buscar" hide-details />
+          </v-flex>
+          <v-flex xs12 lg3 class="px-2">
+            <v-text-field label="Filtrar" hide-details />
+          </v-flex>
+          <v-flex xs12 lg3 class="px-2">
+            <v-text-field label="Ordenar" hide-details />
+          </v-flex>
+          <v-flex xs12 lg3>
+            <v-layout align-center class="mt-3" fill-height justify-end>
+              <p class="mb-0 mx-2" v-text="showPageInfo" />
+              <v-btn icon :disabled="disableBeforeBtn" @click="beforePage">
+                <v-icon>mdi-chevron-left</v-icon>
+              </v-btn>
+              <v-btn icon :disabled="disableNextBtn" @click="nextPage">
+                <v-icon>mdi-chevron-right</v-icon>
+              </v-btn>
+            </v-layout>
+          </v-flex>
         </v-layout>
       </v-col>
     </v-row>
@@ -59,6 +66,9 @@ export default {
   }),
   computed: {
     ...mapState(['teams']),
+    showPageInfo() {
+      return `Pag.: ${this.page + 1} - Equipo: ${this.totalElements}`
+    },
     disableBeforeBtn() {
       return this.page === 0
     },
