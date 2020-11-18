@@ -103,7 +103,7 @@
 
 <script>
 /// <reference path="./../types/index.js" />
-
+import * as Favorites from '~/api/favorite'
 import Avatar from '~/components/Avatar'
 
 export default {
@@ -123,20 +123,17 @@ export default {
     logo() {
       return this.team.logos?.[0]
     },
-    favoriteKey() {
-      return 'team-' + this.team.id
-    },
     perfilLink() {
       return '/team/' + this.team.id
     },
   },
   mounted() {
-    this.isFavourite = localStorage.getItem(this.favoriteKey) !== null
+    this.isFavourite = Favorites.has(this.team.id)
   },
   methods: {
     setAddOrRemoveToFavourite() {
       if (this.isFavourite) {
-        localStorage.removeItem(this.favoriteKey)
+        Favorites.remove(this.team.id)
         this.isFavourite = false
       } else {
         this.showModalAddComment = true
@@ -144,7 +141,7 @@ export default {
     },
     saveFavoriteTeam(formValid) {
       if (!formValid) return false
-      localStorage.setItem(this.favoriteKey, this.favoriteComment)
+      Favorites.save(this.team, this.favoriteComment)
       this.$notify({ type: 'success', text: 'Equipo agregado a favoritos' })
       this.isFavourite = true
       this.close()
