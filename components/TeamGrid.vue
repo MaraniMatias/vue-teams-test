@@ -43,8 +43,8 @@
         </v-layout>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-flex v-show="loading" xs12 class="text-center my-12">
+    <v-row v-if="loading" justify="center">
+      <v-flex xs12 class="text-center my-12">
         <v-progress-circular
           width="2"
           indeterminate
@@ -54,7 +54,7 @@
         <p class="mt-6">Buscando...</p>
       </v-flex>
     </v-row>
-    <v-row justify="center">
+    <v-row v-else justify="center">
       <v-col v-for="team in items" :key="team.id" cols="auto" class="pb-0 mb-0">
         <CardTeam :team="team" :show-comment="favorite" />
       </v-col>
