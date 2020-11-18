@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Snackbar />
-    <v-app-bar fixed app>
+    <v-app-bar fixed app dense dark>
       <v-toolbar-title class="mr-4" v-text="title" />
       <v-btn nuxt text to="/">Inicio</v-btn>
       <v-btn nuxt text to="/favoritos">Favoritos</v-btn>
