@@ -24,6 +24,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "form-rules": "git+https://github.com/MaraniMatias/formRules.git",
     "nuxt": "^2.14.6",
     "nuxt-material-design-icons": "^1.0.4",
     "nuxt-social-meta": "0.0.5"
