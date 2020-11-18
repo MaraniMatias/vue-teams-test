@@ -20,6 +20,7 @@
           </v-layout>
         </v-card-text>
         <v-card-actions>
+          <p class="mb-0" v-text="'Cod: ' + team.id" />
           <v-layout justify-end>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
