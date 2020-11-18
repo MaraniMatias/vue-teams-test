@@ -25,7 +25,7 @@ export const mutations = {
     state.filterItems = teams
   },
   CLEANER_FILTER(state) {
-    state.filterItems = state.teams
+    state.filterItems = state.teams || []
   },
 }
 
@@ -39,13 +39,28 @@ export const actions = {
       return { error: resp.error }
     }
   },
-  filter({ commit, state }, query) {
+  filterTeams({ commit, state }, query) {
     if (query) {
-      console.log(query)
       const filterItems = state.teams.filter((team) => {
         const mascot = team.mascot?.toLowerCase() || ''
         const school = team.school?.toLowerCase() || ''
         return mascot.includes(query) || school.includes(query)
+      })
+      commit('SET_FILTER', filterItems || [])
+    } else {
+      commit('CLEANER_FILTER')
+    }
+  },
+  orderByTeams({ commit, state }, orderKey) {
+    if (orderKey) {
+      const filterItems = state.filterItems.sort((teamA, teamB) => {
+        if (teamA[orderKey] < teamB[orderKey]) {
+          return -1
+        }
+        if (teamA[orderKey] > teamB[orderKey]) {
+          return 1
+        }
+        return 0
       })
       commit('SET_FILTER', filterItems || [])
     } else {
