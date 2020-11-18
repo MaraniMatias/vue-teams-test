@@ -1,6 +1,9 @@
 <template>
-  <v-avatar :size="size" class="">
-    <v-icon v-if="avatarError || !src" :size="size">mdi-shield-outline</v-icon>
+  <v-avatar :size="size" tile>
+    <v-icon v-if="loading" :size="size">mdi-shield-sync-outline</v-icon>
+    <v-icon v-else-if="avatarError || !src" :size="size">
+      mdi-shield-remove-outline
+    </v-icon>
     <img v-else :src="base64img" />
   </v-avatar>
 </template>
