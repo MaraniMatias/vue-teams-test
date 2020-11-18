@@ -7,10 +7,13 @@
           <v-text-field label="Filtrar" />
           <v-text-field label="Ordenar" />
           <v-spacer />
-          <v-btn icon>
+          <p class="mb-0 mx-2">
+            Pagina: {{ page }} - Equipo: {{ totalElements }}
+          </p>
+          <v-btn icon :disabled="disableBeforeBtn" @click="beforePage">
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn icon :disabled="disableNextBtn" @click="nextPage">
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </v-layout>
@@ -50,22 +53,49 @@ export default {
   data: () => ({
     filterItems: [],
     totalElements: 0,
+    page: 0,
+    itemsPrePage: 9,
     loading: true,
   }),
   computed: {
     ...mapState(['teams']),
+    disableBeforeBtn() {
+      return this.page === 0
+    },
+    disableNextBtn() {
+      return this.page * this.itemsPrePage * 2 >= this.totalElements
+    },
   },
   async mounted() {
-    const { data, error } = await this.getTeams()
+    const { error } = await this.getTeams()
     if (error) {
       this.$notify({ type: 'error', text: 'No pudimos listar los equipos' })
     }
     this.loading = false
-    this.teams = data || []
-    this.filterItems = data.splice(0, 9)
+    this.page = 0
+    this.totalElements = this.teams.length
+    this.filterItems = this.teams.slice(0, this.itemsPrePage)
   },
   methods: {
     ...mapActions(['getTeams']),
+    beforePage() {
+      const start = this.page * this.itemsPrePage - this.itemsPrePage
+      const end = start + this.itemsPrePage
+      this.filterItems = this.teams.slice(start, end)
+      if (start > 0) {
+        this.page -= 1
+      } else {
+        this.page = 0
+      }
+    },
+    nextPage() {
+      const start = this.page * this.itemsPrePage + this.itemsPrePage
+      const end = start + this.itemsPrePage
+      this.filterItems = this.teams.slice(start, end)
+      if (start < this.totalElements) {
+        this.page += 1
+      }
+    },
   },
 }
 </script>
