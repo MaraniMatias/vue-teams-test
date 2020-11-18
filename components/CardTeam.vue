@@ -59,23 +59,31 @@ export default {
   data: () => ({
     perfil: {},
     savingToFavorite: false,
+    isInFavourite: false,
   }),
   computed: {
     logo() {
-      return this.team.logos[0]
+      return this.team.logos?.[0]
     },
-    isInFavourite() {
-      return true
+    favoriteKey() {
+      return 'team-' + this.team.id
     },
     perfilLink() {
       return '/team/' + this.team.id
     },
   },
   mounted() {
-    console.log(this.team)
+    this.isInFavourite = localStorage.getItem(this.favoriteKey) !== null
   },
   methods: {
-    setAddOrRemoveToFavourite() {},
+    setAddOrRemoveToFavourite() {
+      if (this.isInFavourite) {
+        localStorage.removeItem(this.favoriteKey)
+      } else {
+        localStorage.setItem(this.favoriteKey, JSON.stringify(this.team))
+      }
+      this.isInFavourite = !this.isInFavourite
+    },
   },
 }
 </script>
