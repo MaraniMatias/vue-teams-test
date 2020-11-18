@@ -8,9 +8,7 @@
             <v-flex d-flex class="ml-4">
               <v-layout column fill-height>
                 <p class="headline mb-0" v-text="team.school" />
-                <span class="subtitle-1">
-                  Abreviatura: {{ team.abbreviation }}
-                </span>
+                <span class="subtitle-1" v-text="team.abbreviation" />
                 <p class="title mb-0">
                   <v-icon :color="team.color" size="24">mdi-paw</v-icon>
                   {{ team.mascot }}
@@ -18,7 +16,37 @@
               </v-layout>
             </v-flex>
           </v-layout>
+          <v-layout v-show="showComment" column>
+            <p class="mb-0 font-weight-bold">Comentario personal:</p>
+            <p class="mb-1" style="min-height: 24px" v-text="favoriteComment" />
+          </v-layout>
         </v-card-text>
+
+        <v-layout v-show="showDetails" column class="px-4">
+          <p class="font-weight-bold">
+            Abreviatura:
+            <span class="ml-1 font-weight-regular" v-text="team.abbreviation" />
+          </p>
+          <p class="font-weight-bold">
+            Conferencia:
+            <span class="ml-1 font-weight-regular" v-text="team.conference" />
+          </p>
+          <p class="font-weight-bold">
+            Division:
+            <span class="ml-1 font-weight-regular" v-text="team.division" />
+          </p>
+          <p class="font-weight-bold">
+            Color:
+            <v-icon :color="team.color">mdi-checkbox-blank-circle</v-icon>
+            <v-icon :color="team.alt_color">mdi-checkbox-blank-circle</v-icon>
+          </p>
+          <p class="mb-0 font-weight-bold">Nombres alternativos:</p>
+          <p class="mb-1" v-text="team.alt_name_1" />
+          <p class="mb-1" v-text="team.alt_name_2" />
+          <p class="mb-1" v-text="team.alt_name_3" />
+        </v-layout>
+
+        <v-divider class="mx-4 mt-2"></v-divider>
         <v-card-actions>
           <p class="mb-0" v-text="'Cod: ' + team.id" />
           <v-layout justify-end>
@@ -36,7 +64,13 @@
               </template>
               {{ isFavourite ? 'Sacar de ' : 'Agregar a ' }} favoritos
             </v-tooltip>
-            <v-btn color="primary" text :to="perfilLink" class="mx-2">
+            <v-btn
+              v-show="!showDetails"
+              color="primary"
+              text
+              :to="perfilLink"
+              class="mx-2"
+            >
               Ver Perfil
             </v-btn>
           </v-layout>
@@ -68,15 +102,19 @@
 </template>
 
 <script>
+/// <reference path="./../types/index.js" />
+
 import Avatar from '~/components/Avatar'
-// import Rating from '~/components/Rating'
+
 export default {
   components: { Avatar },
   props: {
+    /** @type {{ new (): Team }} */
     team: { type: Object, required: true },
+    showComment: { type: Boolean, default: false },
+    showDetails: { type: Boolean, default: false },
   },
   data: () => ({
-    perfil: {},
     isFavourite: false,
     favoriteComment: '',
     showModalAddComment: false,
