@@ -1,5 +1,5 @@
 import * as Teams from '~/api/teams'
-import FilterItems from '~/utils/FilterTeams'
+import FilterTeams from '~/utils/FilterTeams'
 import OrderByTeams from '~/utils/OrderByTeams'
 
 export const state = () => ({
@@ -7,6 +7,8 @@ export const state = () => ({
   filterItems: [],
   itemsPrePage: 9,
   page: 0,
+  query: null,
+  orderKey: null,
 })
 
 export const getters = {
@@ -39,6 +41,12 @@ export const mutations = {
   ORDER_BY(state, orderKey) {
     state.filterItems = OrderByTeams(orderKey, state.filterItems)
   },
+  SAVE_QUERY(state, query) {
+    state.query = query
+  },
+  SAVE_ORDER_KEY(state, key) {
+    state.orderKey = key
+  },
 }
 
 export const actions = {
@@ -53,18 +61,25 @@ export const actions = {
       return { error: resp.error }
     }
   },
-  filterTeams({ commit, state }, query) {
+  filterTeams({ commit, state, dispatch }, query) {
+    commit('SAVE_QUERY', query)
     if (query) {
-      const filterItems = FilterItems(query, state.items)
+      const filterItems = FilterTeams(query, state.items)
       commit('SET_FILTER', filterItems || [])
     } else {
       commit('CLEANER_FILTER')
+      if (state.orderKey) {
+        dispatch('orderByTeams', state.orderKey)
+      }
     }
     commit('SET_PAGE', 0)
   },
-  orderByTeams({ commit }, orderKey) {
+  orderByTeams({ commit, state, dispatch }, orderKey) {
+    commit('SAVE_ORDER_KEY', orderKey)
     if (orderKey) {
       commit('ORDER_BY', orderKey)
+    } else if (state.query) {
+      dispatch('filterTeams', state.query)
     } else {
       commit('CLEANER_FILTER')
     }

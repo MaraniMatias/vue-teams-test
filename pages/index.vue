@@ -34,7 +34,13 @@ export default {
     this.loading = false
   },
   methods: {
-    ...mapActions(['getTeams', 'orderByTeams', 'nextItems', 'beforeItems']),
+    ...mapActions([
+      'getTeams',
+      'orderByTeams',
+      'nextItems',
+      'beforeItems',
+      'filterTeams',
+    ]),
     async search(query) {
       await this.filterTeams(query)
     },
