@@ -8,12 +8,11 @@ export const state = () => ({
   // itemsPrePage: 9,
 })
 
-// export const getters = {
-//   filterItems: (state) => {
-//     const start = state.page + state.itemsPrePage
-//     return state.teams.slice(start, state.itemsPrePage)
-//   },
-// }
+export const getters = {
+  findById: (state) => (teamId) => {
+    return state.teams.find((team) => team.id === teamId)
+  },
+}
 
 export const mutations = {
   SET_TEAMS(state, teams) {
