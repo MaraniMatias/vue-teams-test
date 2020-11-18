@@ -1,87 +1,79 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <TeamGrid
+    :items="filterItems"
+    :page="page"
+    :items-pre-page="itemsPrePage"
+    :total-items="totalElements"
+    :loading="loading"
+    @before="beforePage"
+    @next="nextPage"
+    @search="search"
+    @order="order"
+  />
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import TeamGrid from './../components/TeamGrid'
+import * as Favorites from '~/api/favorite'
+
 export default {
-  components: {},
+  components: { TeamGrid },
+  asyncData() {},
+  data: () => ({
+    teams: [],
+    filterItems: [],
+    totalElements: 0,
+    page: 0,
+    itemsPrePage: 9,
+    loading: true,
+  }),
+  computed: {},
+  mounted() {
+    this.teams = Favorites.getAll()
+    this.reloadItems()
+    this.loading = false
+  },
+  methods: {
+    ...mapActions(['getTeams', 'filterTeams', 'orderByTeams']),
+    reloadItems() {
+      this.page = 0
+      this.totalElements = this.teams.length
+      this.filterItems = this.teams
+        .slice(0, this.itemsPrePage)
+        .map((teamIdAndComent) => {
+          const teamId = teamIdAndComent[0]
+          return this.$store.getters.findById(teamId)
+        })
+    },
+    beforePage() {
+      const start = this.page * this.itemsPrePage - this.itemsPrePage
+      const end = start + this.itemsPrePage
+      this.filterItems = this.teams.slice(start, end)
+      if (start > 0) {
+        this.page -= 1
+      } else {
+        this.page = 0
+      }
+    },
+    nextPage() {
+      const start = this.page * this.itemsPrePage + this.itemsPrePage
+      const end = start + this.itemsPrePage
+      this.filterItems = this.teams.slice(start, end)
+      if (start < this.totalElements) {
+        this.page += 1
+      }
+    },
+    async search(query) {
+      await this.filterTeams(query)
+      this.reloadItems()
+    },
+    async order(orderKey) {
+      this.loading = true
+      await this.orderByTeams(orderKey)
+      this.reloadItems()
+      this.loading = false
+    },
+  },
 }
 </script>
