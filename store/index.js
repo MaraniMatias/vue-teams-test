@@ -1,4 +1,6 @@
 import * as Teams from '~/api/teams'
+import FilterItems from '~/utils/FilterTeams'
+import OrderByTeams from '~/utils/OrderByTeams'
 
 export const state = () => ({
   teams: [],
@@ -40,28 +42,15 @@ export const actions = {
   },
   filterTeams({ commit, state }, query) {
     if (query) {
-      const q = query.toLowerCase()
-      const filterItems = state.filterItems.filter((team) => {
-        const mascot = team.mascot?.toLowerCase() || ''
-        const school = team.school?.toLowerCase() || ''
-        return mascot.includes(q) || school.includes(q)
-      })
+      const filterItems = FilterItems(query, state.filterItems)
       commit('SET_FILTER', filterItems || [])
     } else {
       commit('CLEANER_FILTER')
     }
   },
   orderByTeams({ commit, state }, orderKey) {
+    const filterItems = OrderByTeams(orderKey, state.filterItems)
     if (orderKey) {
-      const filterItems = state.filterItems.sort((teamA, teamB) => {
-        if (teamA[orderKey] < teamB[orderKey]) {
-          return -1
-        }
-        if (teamA[orderKey] > teamB[orderKey]) {
-          return 1
-        }
-        return 0
-      })
       commit('SET_FILTER', filterItems || [])
     } else {
       commit('CLEANER_FILTER')
