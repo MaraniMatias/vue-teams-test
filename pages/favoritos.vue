@@ -13,9 +13,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import TeamGrid from './../components/TeamGrid'
 import * as Favorites from '~/api/favorite'
+import FilterItems from '~/utils/FilterTeams'
+import OrderByTeams from '~/utils/OrderByTeams'
 
 export default {
   components: { TeamGrid },
@@ -35,7 +36,6 @@ export default {
     this.loading = false
   },
   methods: {
-    ...mapActions(['getTeams', 'filterTeams', 'orderByTeams']),
     reloadItems() {
       this.page = 0
       this.totalElements = this.teams.length
@@ -64,14 +64,20 @@ export default {
         this.page += 1
       }
     },
-    async search(query) {
-      await this.filterTeams(query)
-      this.reloadItems()
+    search(query) {
+      if (query) {
+        this.filterItems = FilterItems(query, this.filterItems)
+      } else {
+        this.reloadItems()
+      }
     },
-    async order(orderKey) {
+    order(orderKey) {
       this.loading = true
-      await this.orderByTeams(orderKey)
-      this.reloadItems()
+      if (orderKey) {
+        this.filterItems = OrderByTeams(orderKey, this.filterItems)
+      } else {
+        this.reloadItems()
+      }
       this.loading = false
     },
   },
