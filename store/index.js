@@ -61,7 +61,7 @@ export const actions = {
       return { error: resp.error }
     }
   },
-  filterTeams({ commit, state, dispatch }, query) {
+  filterTeams({ commit, state }, query) {
     commit('CLEANER_FILTER')
     commit('SAVE_QUERY', null)
 
@@ -70,7 +70,7 @@ export const actions = {
       commit('SET_FILTER', filterItems || [])
     }
     if (state.orderKey) {
-      dispatch('orderByTeams', state.orderKey)
+      commit('ORDER_BY', state.orderKey)
     }
 
     commit('SET_PAGE', 0)
@@ -81,7 +81,8 @@ export const actions = {
     commit('SAVE_ORDER_KEY', null)
 
     if (state.query) {
-      dispatch('filterTeams', state.query)
+      const filterItems = FilterTeams(state.query, state.items)
+      commit('SET_FILTER', filterItems || [])
     }
     if (orderKey) {
       commit('ORDER_BY', orderKey)
