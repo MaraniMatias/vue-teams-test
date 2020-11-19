@@ -18,6 +18,8 @@ const items = loadFromLS()
 export const getAll = () => Array.from(items)
 
 /**
+ * Guarda el id del equipo y el comentario, se podría guardar todo el objeto
+ * pero en un proyecto mas real, debería pedirle a la API
  * @param {Team} team
  * @param {String } comment comentario al guardar en favorito
  */

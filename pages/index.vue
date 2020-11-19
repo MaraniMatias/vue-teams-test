@@ -1,3 +1,7 @@
+<!--
+  Uso el store así al entrar al perfil de un equipo y volver, no se pierde la
+  búsqueda
+-->
 <template>
   <GridTeam
     :items="itemsOnPage"

@@ -62,28 +62,33 @@ export const actions = {
     }
   },
   filterTeams({ commit, state, dispatch }, query) {
-    commit('SAVE_QUERY', query)
+    commit('CLEANER_FILTER')
+    commit('SAVE_QUERY', null)
+
     if (query) {
       const filterItems = FilterTeams(query, state.items)
       commit('SET_FILTER', filterItems || [])
-    } else {
-      commit('CLEANER_FILTER')
-      if (state.orderKey) {
-        dispatch('orderByTeams', state.orderKey)
-      }
     }
+    if (state.orderKey) {
+      dispatch('orderByTeams', state.orderKey)
+    }
+
     commit('SET_PAGE', 0)
+    commit('SAVE_QUERY', query)
   },
   orderByTeams({ commit, state, dispatch }, orderKey) {
-    commit('SAVE_ORDER_KEY', orderKey)
+    commit('CLEANER_FILTER')
+    commit('SAVE_ORDER_KEY', null)
+
+    if (state.query) {
+      dispatch('filterTeams', state.query)
+    }
     if (orderKey) {
       commit('ORDER_BY', orderKey)
-    } else if (state.query) {
-      dispatch('filterTeams', state.query)
-    } else {
-      commit('CLEANER_FILTER')
     }
+
     commit('SET_PAGE', 0)
+    commit('SAVE_ORDER_KEY', orderKey)
   },
   beforeItems({ commit, state }) {
     const start = state.page * state.itemsPrePage - state.itemsPrePage
