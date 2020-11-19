@@ -70,7 +70,7 @@ export default {
   components: { CardTeam },
   props: {
     /** @type {{ Array<Team> }} */
-    items: { type: Array, required: true },
+    items: { type: Array, required: true, default: () => [] },
     page: { type: Number, default: 0 },
     itemsPrePage: { type: Number, default: 9 },
     totalItems: { type: Number, default: 0 },
